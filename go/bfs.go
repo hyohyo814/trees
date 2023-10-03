@@ -4,19 +4,19 @@ import (
 	"fmt"
 )
 
-type BinaryNode[T int] struct {
+type BinaryNode[T any] struct {
 	left, right *BinaryNode[T]
-	value int
+	value       int
 }
 
-type Queue[T int] struct {
+type Queue[T any] struct {
 	start, end *QueueNode[T]
-	length int
+	length     int
 }
 
-type QueueNode[T int] struct {
+type QueueNode[T any] struct {
 	next *QueueNode[T]
-	val int
+	val  T
 }
 
 func main() {
@@ -28,61 +28,41 @@ func main() {
 	root.right.left = &BinaryNode[int]{value: 21}
 	root.right.right = &BinaryNode[int]{value: 15}
 
+	fmt.Println("tree display:")
 	root.printTree("", true)
 
-
-	fmt.Println("queue display:")
-	queue := Queue[int]{length: 0}
-	queue.enqueue(1)
-	queue.enqueue(4)
-	queue.enqueue(2)
-	queue.enqueue(3)
-	queue.deque()
-	fmt.Println(queue.length)
-
-	q := queue.getAll()
-	fmt.Println(q)
+	target := 12
+	res := root.bfs(target)
+	fmt.Printf("bfs result for %v: %v\n", target, res)
 }
 
-func (q *Queue[T])getAll() []int{
-	var elems []int
-	for e := q.start; e != nil; e = e.next {
-		elems = append(elems, e.val)
+func (tree *BinaryNode[T]) bfs(needle int) bool {
+	q := Queue[*BinaryNode[T]]{}
+
+	if tree == nil {
+		return false
 	}
-	return elems
-}
+	
+	q.enqueue(tree)
 
-func (q *Queue[T])enqueue(el int) {
-	if q.length == 0 {
-		q.start = &QueueNode[T]{val: el}
-		q.end = q.start 
-	} else {
-		q.end.next = &QueueNode[T]{val: el}
-		q.end = q.end.next 
+	for q.length > 0 {
+		curr := q.deque()
+
+		if curr.val == nil {
+			continue
+		}
+
+		if curr.val.value == needle {
+			return true
+		}
+
+		q.enqueue(curr.val.left)
+		q.enqueue(curr.val.right)
 	}
-	q.length++
+	return false 
 }
 
-func (q *Queue[T])deque() int  {
-	if q == nil {
-		return -1
-	}
-
-	q.length--	
-	tmp := q.start
-	q.start = q.start.next
-
-	tmp.next = nil
-
-	return tmp.val
-}
-
-/*func (tree *BinaryNode[T])bfs(needle int) bool {
-	q := []int{tree}
-
-}*/
-
-func (tree *BinaryNode[T])printTree(prefix string, isLeft bool) {
+func (tree *BinaryNode[T]) printTree(prefix string, isLeft bool) {
 	if tree == nil {
 		return
 	}
@@ -106,3 +86,36 @@ func (tree *BinaryNode[T])printTree(prefix string, isLeft bool) {
 
 }
 
+func (q *Queue[T]) getAll() []T {
+	var elems []T
+	for e := q.start; e != nil; e = e.next {
+		elems = append(elems, e.val)
+	}
+	return elems
+}
+
+func (q *Queue[T]) enqueue(el T) {
+	if q.length == 0 {
+		q.start = &QueueNode[T]{val: el}
+		q.end = q.start
+	} else {
+		q.end.next = &QueueNode[T]{val: el}
+		q.end = q.end.next
+	}
+	q.length++
+}
+
+func (q *Queue[T]) deque() *QueueNode[T]{
+	q.length--
+
+	if q == nil {
+		return nil
+	}
+
+	tmp := q.start
+	q.start = q.start.next
+	tmp.next = nil
+
+
+	return tmp
+}
