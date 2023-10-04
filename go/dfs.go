@@ -6,7 +6,7 @@ import (
 
 type BinaryNode[T int] struct {
 	left, right *BinaryNode[T]
-	value int
+	value       int
 }
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 	root.printTree("", true)
 }
 
-func (tree *BinaryNode[T])printTree(prefix string, isLeft bool) {
+func (tree *BinaryNode[T]) printTree(prefix string, isLeft bool) {
 	if tree == nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (curr *BinaryNode[T]) preOrderWalk(path *[]int) []int {
 	*path = append(*path, curr.value)
 	curr.left.preOrderWalk(path)
 	curr.right.preOrderWalk(path)
-	
+
 	return *path
 }
 
@@ -76,7 +76,7 @@ func (curr *BinaryNode[T]) inOrderWalk(path *[]int) []int {
 	curr.left.inOrderWalk(path)
 	*path = append(*path, curr.value)
 	curr.right.inOrderWalk(path)
-	
+
 	return *path
 }
 
@@ -88,7 +88,7 @@ func (curr *BinaryNode[T]) postOrderWalk(path *[]int) []int {
 	curr.left.postOrderWalk(path)
 	curr.right.postOrderWalk(path)
 	*path = append(*path, curr.value)
-	
+
 	return *path
 }
 
@@ -112,4 +112,3 @@ func (head *BinaryNode[T]) postOrderSearch() []int {
 	fmt.Println(trace)
 	return res
 }
-

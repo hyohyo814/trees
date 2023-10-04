@@ -37,31 +37,41 @@ func main() {
 }
 
 func (tree *BinaryNode[T]) bfs(needle int) bool {
+	// initialize Queue containing BinaryNodes
 	q := Queue[*BinaryNode[T]]{}
 
+	// exit if Node does not exist
 	if tree == nil {
 		return false
 	}
-	
+
+	// insert root of tree into Queue
 	q.enqueue(tree)
 
 	for q.length > 0 {
+		// Deque for search operation
 		curr := q.deque()
 
 		if curr.val == nil {
+			// continue dereferencing nil pointers
 			continue
 		}
 
 		if curr.val.value == needle {
+			// match found
 			return true
 		}
 
+		// enqueue children to continue search operation
 		q.enqueue(curr.val.left)
 		q.enqueue(curr.val.right)
 	}
-	return false 
+
+	// exit if no match found
+	return false
 }
 
+// Method to visualize tree connections
 func (tree *BinaryNode[T]) printTree(prefix string, isLeft bool) {
 	if tree == nil {
 		return
@@ -86,6 +96,7 @@ func (tree *BinaryNode[T]) printTree(prefix string, isLeft bool) {
 
 }
 
+// Method to get all values in tree in a slice
 func (q *Queue[T]) getAll() []T {
 	var elems []T
 	for e := q.start; e != nil; e = e.next {
@@ -105,7 +116,7 @@ func (q *Queue[T]) enqueue(el T) {
 	q.length++
 }
 
-func (q *Queue[T]) deque() *QueueNode[T]{
+func (q *Queue[T]) deque() *QueueNode[T] {
 	q.length--
 
 	if q == nil {
@@ -115,7 +126,6 @@ func (q *Queue[T]) deque() *QueueNode[T]{
 	tmp := q.start
 	q.start = q.start.next
 	tmp.next = nil
-
 
 	return tmp
 }
