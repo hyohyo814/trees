@@ -17,7 +17,7 @@ type QueueNode[T any] struct {
 	val  T
 }
 
-func main()  {
+func main() {
 	tree1 := &BinaryNode[int]{value: 5}
 	tree1.left = &BinaryNode[int]{value: 3}
 	tree1.right = &BinaryNode[int]{value: 1}
@@ -46,18 +46,17 @@ func main()  {
 	tree4.right.left = &BinaryNode[int]{value: 14}
 	tree4.printTree("", true)
 
-
 	res1 := compare(tree1, tree2)
 	res2 := compare(tree2, tree3)
-	res3 := compare(tree1, tree4)	
-	
+	res3 := compare(tree1, tree4)
+
 	fmt.Println(res1)
 	fmt.Println(res2)
 	fmt.Println(res3)
 }
 
 func compare(a *BinaryNode[int], b *BinaryNode[int]) bool {
-	if a == nil  && b == nil {
+	if a == nil && b == nil {
 		return true
 	}
 
